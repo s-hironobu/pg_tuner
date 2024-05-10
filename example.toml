@@ -1,0 +1,176 @@
+#
+# study configuration file
+#
+
+# --------------------------------------------
+# Trial configuration section
+# --------------------------------------------
+[trial]
+
+# Target benchmark: "sysbench" or "pgbench"
+target = "sysbench"
+
+# The number of trial.
+n_trials = 10
+
+# Sampling mode: "TPE", "Random", "Grid", "CmaEs", "QMC" or "GP". (default: "TPE")
+# https://optuna.readthedocs.io/en/stable/reference/samplers/index.html
+sampling_mode = "TPE"
+
+# Whether to restore the database cluster from the backup before each trial. (default: true)
+restore_everytime = true
+
+# --------------------------------------------
+# Monitoring section
+# --------------------------------------------
+[monitoring]
+
+# Whether to monitor Linux statistics. If True, pg_linux_stats module is required. (default: true)
+linux_monitoring = true
+
+# Monitoring interval time [sec]
+monitoring_time = 10
+
+# --------------------------------------------
+# PostgreSQL server configuration section
+# --------------------------------------------
+[postgresql_server]
+
+# Server IP
+host = "192.168.128.193"
+
+# User on the server
+hostuser = "postgres"
+
+# PostgreSQL's port
+port = 5432
+
+# PostgreSQL's user
+user =  "postgres"
+
+# PostgreSQL user's password
+# Set to "None" (not "") if PostgreSQL does not require a password.
+# If PostgreSQL requires a password, but you don't want to store it here, comment out the following line.
+# pg_tuner will prompt you for the PostgreSQL user's password when you run it.
+passwd =  "None"
+
+# Database name
+db =  "testdb"
+
+# Absolute path to the pg_ctl command
+pg_ctl = "/usr/local/pgsql/bin/pg_ctl"
+
+# Absolute path to the database cluster
+pgdata =  "/usr/local/pgsql/data"
+
+# Absolute path to the backup of the database cluster
+pgdata_backup = "/usr/local/pgsql/data.backup"
+
+# --------------------------------------------
+# PostgreSQL configuration parameters section
+#
+# Format: ["param_name", lowest_value, highest_value, unit]
+#
+# Memory units:  B  = bytes            Time units:  us  = microseconds
+#                kB = kilobytes                     ms  = milliseconds
+#                MB = megabytes                     s   = seconds
+#                GB = gigabytes                     min = minutes
+#                TB = terabytes                     h   = hours
+# --------------------------------------------
+[postgresql_conf]
+
+# Note: Parameters listed in Common.IGNORE_PARAMS (default: ["max_connections", "shared_buffers"]) will be ignored
+# even if you set them explicitly.
+pg_config_int = [
+    ["temp_buffers", 32, 1024, "MB"],
+    ["work_mem", 32, 1024, "MB"],
+    ["maintenance_work_mem", 32, 512, "MB"],
+    ["bgwriter_delay", 100, 1000, "ms"],
+    ["bgwriter_lru_maxpages", 0, 1000, ""],
+    ["wal_buffers", 32, 512, "MB"],
+    ["wal_writer_delay", 10, 10000, "ms"],
+    ["checkpoint_timeout", 1, 10, "min"],
+    ["effective_cache_size", 4, 8, "GB"],
+    ["default_statistics_target", 100, 2048, ""],
+    ["autovacuum_naptime", 20, 200, "s"],
+    ["autovacuum_vacuum_threshold", 1000, 500000, ""],
+    ["autovacuum_vacuum_insert_threshold", 1000, 500000, ""],
+    ["autovacuum_analyze_threshold", 1000, 500000, ""],
+]
+
+pg_config_real = [
+    ["checkpoint_completion_target", 0.1, 0.9, ""],
+    ["autovacuum_vacuum_scale_factor", 0.0, 0.1, ""],
+    ["autovacuum_vacuum_insert_scale_factor", 0.0, 0.1, ""],
+    ["autovacuum_analyze_scale_factor", 0.0, 0.1, ""],
+]
+
+# --------------------------------------------
+# Benchmark section
+# --------------------------------------------
+[benchmark]
+
+## --------------------------------------------
+## sysbench subsection
+## --------------------------------------------
+[benchmark.sysbench]
+
+# the path of sysbench
+bindir =  "/usr/bin"
+
+# sysbench's table size
+sb_table_size =  500000
+
+# the number of sysbench tables
+sb_tables =  5
+
+# Scenario
+scenario = [
+    # [start[sec], threads, duration[sec], command, table_size, tables]
+    [ 0, 10, 25, "oltp_read_write", 500000, 3],
+    [ 5, 10, 20, "oltp_read_write", 500000, 3],
+    [10, 10, 15, "oltp_read_write", 500000, 3],
+]
+
+
+# Additional monitor items
+#
+# Example: Additional monitoring items using pg_show_vm module.
+#additional_monitor_items = [
+#    ["sbtest1", "select * from pg_show_rel_vm('sbtest1', false, false);"],
+#    ["sbtest2", "select * from pg_show_rel_vm('sbtest2', false, false);"],
+#    ["sbtest3", "select * from pg_show_rel_vm('sbtest3', false, false);"],
+#    ["sbtest4", "select * from pg_show_rel_vm('sbtest4', false, false);"],
+#    ["sbtest5", "select * from pg_show_rel_vm('sbtest5', false, false);"],
+#]
+additional_monitor_items = []
+
+## --------------------------------------------
+## pgbench subsection
+## --------------------------------------------
+[benchmark.pgbench]
+
+# the path of pgbench
+bindir = "/usr/local/pgsql/bin"
+
+# pgbench's scale
+scale = 1
+
+# Scenario
+scenario = [
+    # [start[sec], threads, duration[sec], scale]
+    [ 0, 10, 20, 1],
+    [ 5, 10, 15, 1],
+    [10, 10, 10, 1],
+]
+
+# Additional monitor items
+#
+# Example: Additional monitoring items using pg_show_vm module.
+#additional_monitor_items = [
+#    ["pgbench_accounts", "select * from pg_show_rel_vm('pgbench_accounts', false, false);",],
+#    ["pgbench_branches", "select * from pg_show_rel_vm('pgbench_branches', false, false);",],
+#    ["pgbench_history", "select * from pg_show_rel_vm('pgbench_history', false, false);",],
+#    ["pgbench_tellers", "select * from pg_show_rel_vm('pgbench_tellers', false, false);",],
+#]
+additional_monitor_items = []
