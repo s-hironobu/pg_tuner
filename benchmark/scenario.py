@@ -102,7 +102,6 @@ class Scenario:
             print("Info: monitor process created.")
 
         while True:
-            time.sleep(monitoring_time)
             if _queue_mon.empty() == False:
                 if Log.info <= Common.DEFAULT_LOG_LEVEL:
                     print('Info: monitor process terminated by "stop" message.')
@@ -110,6 +109,8 @@ class Scenario:
             mon.monitoring()
             if Log.info <= Common.DEFAULT_LOG_LEVEL:
                 print("Info: monitor process retrieves the statistics.")
+
+            time.sleep(monitoring_time)
 
         mon.stop
 
@@ -132,17 +133,6 @@ class Scenario:
         # Don't set: `mp.set_start_method("spawn")`
         _queue = mp.Queue()
 
-        # Create and Start benchmark threads.
-        no = 0
-        process_list = []
-        for sc in scenario:
-            process = mp.Process(name=str(no), target=self.bench, args=(no, _queue, sc), daemon=True)
-            process.start()
-            no += 1
-            process_list.append(process)
-
-        msg_list = []
-
         # Create and Start monitor process
         if log_dir != None:
             _queue_mon = mp.Queue()
@@ -164,6 +154,17 @@ class Scenario:
                 daemon=True,
             )
             process_mon.start()
+
+        # Create and Start benchmark threads.
+        no = 0
+        process_list = []
+        for sc in scenario:
+            process = mp.Process(name=str(no), target=self.bench, args=(no, _queue, sc), daemon=True)
+            process.start()
+            no += 1
+            process_list.append(process)
+
+        msg_list = []
 
         # Join processes
         for ps in process_list:

@@ -51,6 +51,7 @@ class PgTuner:
 
         # 2. pg start
         self.pg.start()
+        time.sleep(5) # Wait until Postgres is operational.
 
         # 3. benchmark run
         _log_dir = self.repo.get_log_dir(trial.number)
