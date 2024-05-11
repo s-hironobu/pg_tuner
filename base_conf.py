@@ -339,6 +339,16 @@ class BaseConf:
     @check_template
     def _sysbench_check(self):
 
+        print("\nSysbench check start.")
+        print("(1) Sysbench bindir:")
+        _sysbench_path = self.bench_conf["bindir"] + "sysbench"
+        if os.path.isfile(_sysbench_path) == False:
+            print("Error: '{}' not found.".format(_sysbench_path))
+            sys.exit(1)
+        else:
+            print("ok.")
+        print("Sysbench check finished.\n")
+
         sysbench = self.create_bench()
         print("")
         num_sbtest, num_sbtest_row = sysbench.check()
@@ -383,6 +393,16 @@ class BaseConf:
 
     @check_template
     def _pgbench_check(self):
+
+        print("\npgbench check start.")
+        print("(1) pgbench bindir:")
+        _pgbench_path = self.bench_conf["bindir"] + "pgbench"
+        if os.path.isfile(_pgbench_path) == False:
+            print("Error: '{}' not found.".format(_pgbench_path))
+            sys.exit(1)
+        else:
+            print("ok.")
+        print("pgbench check finished.\n")
 
         pgbench = self.create_bench()
         print("")
