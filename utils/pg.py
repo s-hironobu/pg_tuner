@@ -424,14 +424,14 @@ class PG:
     """
     # Checks PostgreSQL server configuration
     """
-    def check(self, restore_everytime, monitoring=True):
+    def check(self, restore_everytime, linux_monitoring):
         if self.host == "localhost" or self.host == "127.0.0.1":
-            return self._check_local(restore_everytime, monitoring)
+            return self._check_local(restore_everytime, linux_monitoring)
         else:
-            return self._check_remote(restore_everytime, monitoring)
+            return self._check_remote(restore_everytime, linux_monitoring)
 
 
-    def _check_local(self, restore_everytime, monitoring=True):
+    def _check_local(self, restore_everytime, linux_monitoring):
 
         print("Server Check Start.")
 
@@ -458,7 +458,7 @@ class PG:
         count += 1
         print("({}) Check preload libraries:".format(count))
         for module in Common.REQUIRED_MODULES:
-            if monitoring == False:
+            if linux_monitoring == False:
                 # Skip this check
                 break
 
@@ -560,7 +560,7 @@ class PG:
             _conn["superuser_reserved_connections"],
         ]
 
-    def _check_remote(self, restore_everytime, monitoring=True):
+    def _check_remote(self, restore_everytime, linux_monitoring):
 
         print("Server Check Start.")
 
@@ -611,7 +611,7 @@ class PG:
             print("({}) Check preload libraries:".format(count))
             for module in Common.REQUIRED_MODULES:
 
-                if monitoring == False:
+                if linux_monitoring == False:
                     # Skip this check
                     break
 

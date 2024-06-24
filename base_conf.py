@@ -22,7 +22,7 @@ def check_template(check_func):
             max_connections,
             reserved_connections,
             superuser_reserved_connections,
-        ] = pg.check(True)
+        ] = pg.check(self.restore_everytime, self.linux_monitoring)
         if ret == False:
             sys.exit(1)
         time.sleep(5)  # Waiting for PostgreSQL to start up.
