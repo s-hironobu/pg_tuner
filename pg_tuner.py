@@ -11,7 +11,7 @@ Usage:
  pg_tuner.py backup --conf conf.toml
  pg_tuner.py analyze --db PATH/study.db
 
-  Copyright (c) 2024, Hironobu Suzuki @ interdb.jp
+  Copyright (c) 2024-2025, Hironobu Suzuki @ interdb.jp
 """
 
 import argparse

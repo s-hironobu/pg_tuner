@@ -1,7 +1,7 @@
 """
 pg.py
 
-  Copyright (c) 2024, Hironobu Suzuki @ interdb.jp
+  Copyright (c) 2024-2025, Hironobu Suzuki @ interdb.jp
 """
 
 import warnings
