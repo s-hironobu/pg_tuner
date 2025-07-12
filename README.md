@@ -54,6 +54,11 @@ For example, statistical information from trials with poor performance due to pa
 The name `pg_tuner` reflects the functionality of the by-product rather than its original purpose.
 
 
+#### Additional Information
+
+Microsoft has provided [OpenRCA](https://github.com/microsoft/OpenRCA), a benchmark for assessing LLMs' root cause analysis ability in software operating scenarios.
+It contains a large telemetry dataset.
+
 ## References
 
 
